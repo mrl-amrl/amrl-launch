@@ -1,0 +1,35 @@
+<launch>
+    <arg name="laser_device" default="/dev/hokuyo"/>
+    <arg name="xsens_device" default="/dev/xsense"/>
+
+    <node pkg="tf" type="static_transform_publisher" name="base_link_footprint" args="0 0 0 0 0 0 base_footprint base_stabilized 80"/>
+    <node pkg="tf" type="static_transform_publisher" name="base_link_laser" args="0 0 0 0 0 0 base_link laser 80"/>
+    <include file="$(find laser_chain_filters)/launch/filters.launch"/>
+
+    <include file="$(find mercury_launch)/launch/xsens_driver.launch">
+        <arg name="device" value="$(arg xsens_device)"/>
+        <arg name="respawn" value="true"/>
+    </include>
+
+    <node pkg="laser_stablizer" type="stablizer_node.py" name="stablizer_node" output="screen">
+        <param name="dynamixel_ip" value="192.168.10.170"/>
+        <param name="dynamixel_port" value="3028"/>
+    </node>
+
+    <node pkg="imu_tf" type="imu_tf" name="imu_to_tf">
+        <param name="base_stabilized_frame" value="base_stabilized" />
+        <param name="base_frame" value="base_link" />
+    </node>
+
+    <include file="$(find navigation_launch)/launch/laser.launch">
+        <arg name="laser_port" value="$(arg laser_device)"/>
+    </include>
+
+    <node pkg="laser_distance" type="laser_node" name="laser_distance" respawn="true" respawn_delay="1">
+        <param name="angle" value="0"/>
+    </node>
+
+    <node pkg="mercury_usb" type="usb-node.py" name="mercury_usb" respawn="true" respawn_delay="1">
+        <param name="devices" value="$(arg laser_device),$(arg xsens_device)"/>
+    </node>
+</launch>
