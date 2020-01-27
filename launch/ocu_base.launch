@@ -13,8 +13,6 @@
     </node>
     <node name="dynamic_reconfigure_load_trajectory" pkg="dynamic_reconfigure" type="dynparam" args="load /mercury_trajectory $(arg trajectory_config)" />
 
-    <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch"/>
-
     <node pkg="arka_manipulator" name="manipulator" type="joy_manipulator_arka" output="screen" respawn="true" respawn_delay="1">
         <rosparam command="load" file="$(arg arka_config)" />
         <param name="main_board_ip" type="string" value="192.168.10.170" />
