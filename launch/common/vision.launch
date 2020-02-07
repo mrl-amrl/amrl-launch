@@ -1,0 +1,24 @@
+<launch>
+    <arg name="image_topic" default="/usb_cam/image_raw" />
+    <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen">
+        <param name="video_device" value="/dev/video0" />
+        <param name="image_width" value="640" />
+        <param name="image_height" value="480" />
+        <param name="pixel_format" value="yuyv" />
+        <param name="camera_frame_id" value="usb_cam" />
+        <param name="io_method" value="mmap"/>
+    </node>
+    <node pkg="amrl_motion_detection" type="motion_detection_node" name="motion_detection" output="screen" respawn="true">
+        <remap from="image_topic" to="$(arg image_topic)" />
+    </node>
+    <node name="qrcode_detection" type="qrcode_reader_node" pkg="amrl_qrcode_detection" output="screen" respawn="true">
+        <remap from="image" to="$(arg image_topic)"/>
+    </node>
+    <node name="hazmat_detection" pkg="amrl_hazmat_detection" type="hazmat_node" output="screen" respawn="true">
+        <remap from="image" to="$(arg image_topic)" />
+        <remap from="hazmats" to="/vision/hazmat_detections/hazmats" />
+    </node>
+    <node name="amrl_vision_display" type="display-node.py" pkg="amrl_vision_display" output="screen" >
+        <remap from="image" to="$(arg image_topic)"/>
+    </node>
+</launch>
