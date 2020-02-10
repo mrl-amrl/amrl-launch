@@ -13,7 +13,7 @@
     </node>
     <node name="dynamic_reconfigure_load_trajectory" pkg="dynamic_reconfigure" type="dynparam" args="load /mercury_trajectory $(arg trajectory_config)" />
 
-    <node pkg="arka_manipulator" name="manipulator" type="joy_manipulator_arka" output="screen" respawn="true" respawn_delay="1">
+    <node pkg="arka_manipulator" name="manipulator" type="manipulator.py" output="screen" respawn="true" respawn_delay="1">
         <rosparam command="load" file="$(arg arka_config)" />
         <param name="main_board_ip" type="string" value="192.168.10.170" />
         <param name="sensor_board_ip" type="string" value="192.168.10.20" />
