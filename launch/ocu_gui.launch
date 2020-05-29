@@ -1,4 +1,6 @@
 <launch>
     <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch"/>
     <include file="$(find amrl_launch)/launch/ocu_base.launch"/>
+    <include file="$(find vision_launch)/launch/nodelet.launch"/>
+    <include file="$(find mercury_gui)/launch/mercury_gui.launch"/>
 </launch>

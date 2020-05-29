@@ -9,8 +9,8 @@
         <arg name="repeat_rate" value="$(arg repeat_rate)"/>
     </include>
 
-    <node pkg="mercury_trajectory" type="trajectory-node.py" name="mercury_trajectory">
-    </node>
+    <node pkg="mercury_trajectory" type="trajectory-node.py" name="mercury_trajectory" />
+
     <node name="dynamic_reconfigure_load_trajectory" pkg="dynamic_reconfigure" type="dynparam" args="load /mercury_trajectory $(arg trajectory_config)" />
 
     <node pkg="arka_manipulator" name="manipulator" type="manipulator.py" output="screen" respawn="true" respawn_delay="1">
